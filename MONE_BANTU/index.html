@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MONË BANTU — Achat et vente entre particuliers au Cameroun</title>
+    <meta name="description" content="MONË BANTU, la marketplace camerounaise. Achetez et vendez vêtements, téléphones, accessoires entre particuliers.">
+
+    <!-- Open Graph (partage WhatsApp/Facebook) -->
+    <meta property="og:title" content="MONË BANTU — Marketplace camerounaise">
+    <meta property="og:description" content="Achetez & vendez en toute confiance au Cameroun">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="images/og-image.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        .recent-articles { padding: 60px 0; background: var(--light-bg); }
+        .view-more { text-align: center; margin-top: 35px; }
+        .view-more a {
+            display: inline-block;
+            padding: 13px 35px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .view-more a:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(233,69,96,0.4); }
+        .no-articles { text-align:center; color:#888; grid-column:1/-1; padding: 40px; }
+    </style>
+</head>
+<body>
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <h1>MONË <span>BANTU</span></h1>
+                    <p class="slogan">Achetez &amp; vendez en toute confiance au Cameroun</p>
+                </a>
+            </div>
+
+            <div class="search-bar">
+                <form id="searchForm">
+                    <input type="text" id="searchInput" placeholder="Que recherchez-vous ?">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+
+            <ul class="nav-menu" id="navMenu">
+                <!-- Rempli dynamiquement par JS selon session -->
+                <li><a href="php/acheter.php"><i class="fas fa-store"></i> Acheter</a></li>
+            </ul>
+
+            <div class="hamburger"><span></span><span></span><span></span></div>
+        </div>
+    </nav>
+
+    <!-- ===== BANDEAU RÉELS ===== -->
+    <div class="reels-bar-wrap">
+        <div class="container">
+            <div class="reels-bar" id="reelsBar"></div>
+        </div>
+    </div>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="container">
+            <h2>Bienvenue sur MONË BANTU</h2>
+            <p>La marketplace camerounaise — achetez et vendez facilement entre particuliers</p>
+            <div class="hero-buttons">
+                <a href="php/acheter.php" class="btn-primary">
+                    <i class="fas fa-search"></i> Parcourir les articles
+                </a>
+                <a href="php/register.php" class="btn-secondary" id="heroCta">
+                    <i class="fas fa-plus-circle"></i> Mettre en vente
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CATÉGORIES ===== -->
+    <section class="categories">
+        <div class="container">
+            <h2 class="section-title">Catégories populaires</h2>
+            <div class="categories-grid">
+                <a href="php/acheter.php?categorie=Homme" class="category-card">
+                    <i class="fas fa-tshirt"></i><h3>Mode Homme</h3><p>Vêtements, chaussures, accessoires</p>
+                </a>
+                <a href="php/acheter.php?categorie=Femme" class="category-card">
+                    <i class="fas fa-female"></i><h3>Mode Femme</h3><p>Vêtements, sacs, accessoires</p>
+                </a>
+                <a href="php/acheter.php?categorie=Enfant" class="category-card">
+                    <i class="fas fa-child"></i><h3>Enfants</h3><p>Vêtements, jouets, chaussures</p>
+                </a>
+                <a href="php/acheter.php?categorie=%C3%89lectronique" class="category-card">
+                    <i class="fas fa-mobile-alt"></i><h3>Électronique</h3><p>Téléphones, ordinateurs</p>
+                </a>
+                <a href="php/acheter.php?categorie=Maison" class="category-card">
+                    <i class="fas fa-home"></i><h3>Maison</h3><p>Décoration, électroménager</p>
+                </a>
+                <a href="php/acheter.php?categorie=Sport" class="category-card">
+                    <i class="fas fa-running"></i><h3>Sport</h3><p>Équipements et vêtements</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ARTICLES RÉCENTS ===== -->
+    <section class="recent-articles">
+        <div class="container">
+            <h2 class="section-title">Annonces récentes</h2>
+            <div class="articles-grid" id="articles-container">
+                <div class="loading-spinner" style="grid-column:1/-1;text-align:center;padding:40px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size:2rem;color:#e94560;"></i>
+                </div>
+            </div>
+            <div class="view-more">
+                <a href="php/acheter.php">Voir tous les articles <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== COMMENT ÇA MARCHE ===== -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">Comment ça marche ?</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <i class="fas fa-camera"></i>
+                    <h3>Photo &amp; description</h3>
+                    <p>Photographie ton article, décris-le et fixe ton prix</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <i class="fas fa-upload"></i>
+                    <h3>Publication</h3>
+                    <p>Ton annonce est en ligne en quelques secondes</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <i class="fas fa-comments"></i>
+                    <h3>Négociation</h3>
+                    <p>Discute directement avec l'acheteur via la messagerie</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <i class="fas fa-handshake"></i>
+                    <h3>Transaction</h3>
+                    <p>Rencontrez-vous et finalisez la vente</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== MOYENS DE PAIEMENT ===== -->
+    <section class="payment-methods">
+        <div class="container">
+            <h2 class="section-title">Moyens de paiement acceptés</h2>
+            <div class="payment-grid">
+                <div class="payment-item"><i class="fas fa-mobile-alt"></i><p>Orange Money</p></div>
+                <div class="payment-item"><i class="fas fa-mobile-alt"></i><p>MTN Mobile Money</p></div>
+                <div class="payment-item"><i class="fas fa-university"></i><p>Express Union</p></div>
+                <div class="payment-item"><i class="fas fa-money-bill-wave"></i><p>Espèces</p></div>
+            </div>
+            <p class="payment-note">
+                <i class="fas fa-info-circle"></i>
+                L'acheteur et le vendeur s'arrangent directement pour le paiement et la remise de l'article.
+            </p>
+        </div>
+    </section>
+
+    <!-- ===== TÉMOIGNAGES ===== -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">Ils nous font confiance</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-avatar">M</div>
+                    <p class="testimonial-text">J'ai vendu mon téléphone en 2 jours. Paiement rapide via Orange Money !</p>
+                    <p class="testimonial-author">— Marc de Douala</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-avatar">F</div>
+                    <p class="testimonial-text">J'ai trouvé une belle robe pour ma fille. Le vendeur était super sympa.</p>
+                    <p class="testimonial-author">— Fatima de Yaoundé</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-avatar">P</div>
+                    <p class="testimonial-text">Plateforme simple et efficace. Je recommande vivement !</p>
+                    <p class="testimonial-author">— Paul de Garoua</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section class="cta">
+        <div class="container">
+            <h2>Prêt à vendre ou acheter ?</h2>
+            <p>Rejoins des milliers de Camerounais qui utilisent déjà MONË BANTU</p>
+            <div class="cta-buttons" id="ctaButtons">
+                <a href="php/register.php" class="btn-primary">Créer un compte</a>
+                <a href="php/acheter.php" class="btn-secondary">Explorer les annonces</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>MONË BANTU</h3>
+                    <p>La marketplace camerounaise</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="php/acheter.php">Acheter</a></li>
+                        <li><a href="php/vendre.php">Vendre</a></li>
+                        <li><a href="php/boutique.php">Boutique</a></li>
+                        <li><a href="php/reels.php">Réels</a></li>
+                        <li><a href="php/profil.php">Mon profil</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Informations</h4>
+                    <ul>
+                        <li><a href="php/cgu.php">Conditions d'utilisation</a></li>
+                        <li><a href="php/politique_confidentialite.php">Confidentialité</a></li>
+                        <li><a href="#">Comment acheter</a></li>
+                        <li><a href="#">Comment vendre</a></li>
+                        <li><a href="#">Sécurité</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-phone"></i> +237 600 000 000</p>
+                    <p><i class="fas fa-envelope"></i> contact@monebantu.cm</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 MONË BANTU — Tous droits réservés</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+    // ============================================================
+    //  INDEX.HTML — Script spécifique accueil
+    // ============================================================
+
+    const PHP = 'php/';
+
+    /* ---- Menu dynamique selon session ---- */
+    fetch(PHP + 'check_session.php')
+        .then(r => r.json())
+        .then(data => {
+            const menu = document.getElementById('navMenu');
+            const badge = data.messages_non_lus > 0
+                ? `<span class="badge">${data.messages_non_lus}</span>` : '';
+
+            if (data.logged_in) {
+                menu.innerHTML = `
+                    <li><a href="php/acheter.php"><i class="fas fa-store"></i> Acheter</a></li>
+                    <li><a href="php/actualites.php"><i class="fas fa-newspaper"></i> Actualités</a></li>
+                    <li><a href="php/vendre.php"><i class="fas fa-plus-circle"></i> Vendre</a></li>
+                    <li><a href="php/boutique.php"><i class="fas fa-shop"></i> Boutique</a></li>
+                    <li><a href="php/reels.php"><i class="fas fa-clapperboard"></i> Réels</a></li>
+                    <li><a href="php/panier.php"><i class="fas fa-cart-shopping"></i> Panier</a></li>
+                    <li><a href="php/mes_achats.php"><i class="fas fa-bag-shopping"></i> Mes achats</a></li>
+                    <li><a href="php/mes_notifications.php"><i class="fas fa-bell"></i> Notifications</a></li>
+                    <li><a href="php/messagerie.php"><i class="fas fa-envelope"></i> Messages${badge}</a></li>
+                    <li><a href="php/profil.php"><i class="fas fa-user"></i> ${data.pseudo}</a></li>
+                    <li><a href="php/logout.php" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
+                `;
+                // Hero : bouton "Mettre en vente" → vendre.php
+                const heroCta = document.getElementById('heroCta');
+                if (heroCta) {
+                    heroCta.href = 'php/vendre.php';
+                    heroCta.innerHTML = '<i class="fas fa-plus-circle"></i> Mettre en vente';
+                }
+                // CTA : masquer "Créer un compte"
+                const ctaRegister = document.querySelector('#ctaButtons a[href="php/register.php"]');
+                if (ctaRegister) ctaRegister.style.display = 'none';
+            } else {
+                menu.innerHTML = `
+                    <li><a href="php/acheter.php"><i class="fas fa-store"></i> Acheter</a></li>
+                    <li><a href="php/login.php" class="btn-connexion"><i class="fas fa-sign-in-alt"></i> Connexion</a></li>
+                    <li><a href="php/register.php" class="btn-inscription"><i class="fas fa-user-plus"></i> Inscription</a></li>
+                `;
+            }
+        })
+        .catch(() => {
+            // Si la session échoue → menu non-connecté par défaut
+            document.getElementById('navMenu').innerHTML = `
+                <li><a href="php/acheter.php"><i class="fas fa-store"></i> Acheter</a></li>
+                <li><a href="php/login.php" class="btn-connexion"><i class="fas fa-sign-in-alt"></i> Connexion</a></li>
+                <li><a href="php/register.php" class="btn-inscription"><i class="fas fa-user-plus"></i> Inscription</a></li>
+            `;
+        });
+
+    /* ---- Articles récents ---- */
+    fetch(PHP + 'get_articles.php?limit=8')
+        .then(r => r.json())
+        .then(articles => {
+            const container = document.getElementById('articles-container');
+            if (!articles.length) {
+                container.innerHTML = '<p class="no-articles">Aucun article pour le moment. Soyez le premier à vendre !</p>';
+                return;
+            }
+            container.innerHTML = articles.map(a => {
+                const photo = a.photo_principale || 'uploads/articles/default.jpg';
+                const initiales = (a.vendeur_pseudo || '?').trim().substring(0, 2).toUpperCase();
+                return `
+                    <div class="article-card">
+                        <div class="article-image">
+                            <img src="${photo}" alt="${a.titre}" loading="lazy">
+                            <span class="article-etat">${a.etat}</span>
+                        </div>
+                        <div class="article-info">
+                            <h3 class="article-title">${a.titre}</h3>
+                            <p class="article-price">${a.prix_formate || (new Intl.NumberFormat('fr-FR').format(a.prix) + ' FCFA')}</p>
+                            <div class="article-seller">
+                                <div class="seller-avatar">${initiales}</div>
+                                <span>${a.vendeur_pseudo || ''}</span>
+                            </div>
+                            <p class="article-location">
+                                <i class="fas fa-map-marker-alt"></i> ${a.ville || 'Cameroun'}
+                            </p>
+                            <a href="php/article.php?id=${a.id}" class="btn-detail">
+                                <i class="fas fa-eye"></i> Voir le détail
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        })
+        .catch(() => {
+            document.getElementById('articles-container').innerHTML =
+                '<p class="no-articles">Erreur de chargement. Veuillez rafraîchir la page.</p>';
+        });
+
+    /* ---- Recherche (une seule fois, pas de doublon) ---- */
+    document.getElementById('searchForm')?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const q = document.getElementById('searchInput').value.trim();
+        if (q) window.location.href = 'php/acheter.php?search=' + encodeURIComponent(q);
+    });
+
+    /* ---- Menu mobile ---- */
+    document.querySelector('.hamburger')?.addEventListener('click', function () {
+        document.querySelector('.nav-menu').classList.toggle('active');
+        this.classList.toggle('active');
+    });
+    </script>
+</body>
+</html>
